@@ -7,5 +7,5 @@ import { NextFunction, Request, Response } from 'express';
  * @returns
  */
 export declare function correlationMiddleware(header?: string): (request: Request, response: Response, next: NextFunction) => void;
-export declare function withCorrelation(): any;
+export declare function withCorrelation(): string | undefined;
 //# sourceMappingURL=correlationMiddleware.d.ts.map
