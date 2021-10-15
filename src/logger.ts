@@ -109,3 +109,4 @@ const createSilentLogger = (label: string, level?: NPMLoggingLevels) => {
 
 const log = withLogger('logger');
 log.info(message);
+winston

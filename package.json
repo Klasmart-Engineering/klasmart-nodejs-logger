@@ -5,20 +5,20 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run clean && babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "build": "npm run clean && babel src --out-dir dist --extensions \".ts\" --source-maps inline && tsc --emitDeclarationOnly",
     "clean": "rm -rf dist"
   },
   "author": "Mitch Goshorn",
   "license": "ISC",
   "dependencies": {
     "@newrelic/winston-enricher": "^2.0.0",
-    "@types/cls-hooked": "^4.3.3",
     "cls-hooked": "^4.2.2",
     "uuid": "^8.3.2",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
+    "@types/cls-hooked": "^4.3.3",
     "@babel/core": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.15.0",
