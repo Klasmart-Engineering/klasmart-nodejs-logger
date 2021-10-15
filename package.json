@@ -1,6 +1,6 @@
 {
   "name": "kidsloop-nodejs-logger",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Logging utility built on top of Winston to provide logging functionality for NodeJS based Kidsloop apps",
   "main": "dist/index.js",
   "scripts": {
@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "@newrelic/winston-enricher": "^2.0.0",
-    "cls-hooked": "^4.2.2",
     "uuid": "^8.3.2",
     "winston": "^3.3.3"
   },
