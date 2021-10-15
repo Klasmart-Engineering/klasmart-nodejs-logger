@@ -17,7 +17,9 @@ export function correlationMiddleware(header = 'x-correlation-id') {
         if (!correlationId) {
             correlationId = generateCorrelationId();
         }
-        namespace.set('correlationId', correlationId);
+        namespace.run(() => {
+            namespace.set('correlationId', correlationId);
+        });
         next();
     }
 }
