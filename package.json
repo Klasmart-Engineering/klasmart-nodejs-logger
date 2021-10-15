@@ -1,10 +1,12 @@
 {
   "name": "kidsloop-nodejs-logger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Logging utility built on top of Winston to provide logging functionality for NodeJS based Kidsloop apps",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run clean && babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "clean": "rm -rf dist"
   },
   "author": "Mitch Goshorn",
   "license": "ISC",
@@ -16,6 +18,10 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-typescript": "^7.15.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
     "@types/supertest": "^2.0.11",
