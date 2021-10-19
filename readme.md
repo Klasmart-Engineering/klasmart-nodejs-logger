@@ -41,6 +41,7 @@ allLogs.silly('this log will be shown');
 
 ##### Environment Configuration
 LOG_STYLE - One of: [STRING_COLOR, STRING, JSON, SILENT]. Default: STRING_COLOR. Configures Winston format used for logs. Value explanation:
+
 * STRING_COLOR: Provides simple string interpolated logs with color enhancement. Recommended for viewing logs in a local terminal.
 * STRING: Similar to STRING_COLOR format but lacks color encoding. Useful for environments where Strings are preferred but color encoding characters are not processed.
 * JSON: Logs are written in JSON format. Useful for injestion for automated tooling, aggregate logs. Recommended for deployed services.
