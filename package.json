@@ -1,10 +1,11 @@
 {
   "name": "kidsloop-nodejs-logger",
-  "version": "0.1.6",
+  "version": "0.1.7-0",
   "description": "Logging utility built on top of Winston to provide logging functionality for NodeJS based Kidsloop apps",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version",
     "build": "npm run clean && babel src --out-dir dist --extensions \".ts\" --source-maps inline && tsc --emitDeclarationOnly",
     "clean": "rm -rf dist"
   },
@@ -27,7 +28,8 @@
     "cz-conventional-changelog": "^3.3.0",
     "express": "^4.17.1",
     "jest": "^27.2.5",
-    "supertest": "^6.1.6"
+    "supertest": "^6.1.6",
+    "standard-version": "^9.3.2"
   },
   "config": {
     "commitizen": {

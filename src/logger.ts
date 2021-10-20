@@ -2,6 +2,7 @@
 import newrelicFormatter from '@newrelic/winston-enricher';
 import winston, { Logger } from 'winston';
 import { withCorrelation } from './correlationMiddleware';
+import { NewRelicLogForwarderTransport } from './newRelicLogForwarder';
 
 type NPMLoggingLevels = 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error';
 type LogStyle = 'STRING_COLOR' | 'STRING' | 'JSON' | 'SILENT';
@@ -61,7 +62,8 @@ const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
         ),
         
         transports: [
-            new winston.transports.Console()
+            new winston.transports.Console(),
+            NewRelicLogForwarderTransport()
         ]
     });
 }
