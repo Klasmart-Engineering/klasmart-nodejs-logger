@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7-0](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.6...v0.1.7-0) (2021-10-20)
+
+
+### Features
+
+* **nr-log-api:** add testing implementation of log API ([fb06559](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/fb0655912a76db032b70cf46f707cd7b25d61a06))
+
 ### 0.1.6 (2021-10-20)
 
 
