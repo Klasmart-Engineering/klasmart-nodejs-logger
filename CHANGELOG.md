@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.7-0...v0.1.7) (2021-10-22)
+
+
+### Features
+
+* **logging-api:** add logging api as Winston Transport ([e98e52d](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/e98e52d6d6c7bad329b7c1aa902d152af1c9ce37))
+
 ### [0.1.7-0](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.6...v0.1.7-0) (2021-10-20)
 
 
