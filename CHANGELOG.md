@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.7...v0.1.8) (2021-10-22)
+
+
+### Features
+
+* **new-relic:** update config to point to eu endpoint, update git config, rebuild artifacts ([e714d5b](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/e714d5be9d8fc0803315cda30b11d7de1225930f))
+
 ### [0.1.7](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.7-0...v0.1.7) (2021-10-22)
 
 
