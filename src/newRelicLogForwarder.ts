@@ -4,7 +4,7 @@ import Transport from 'winston-transport';
 import fs from 'fs';
 import { Logger } from 'winston';
 
-const API_HOSTNAME = process.env.KL_NR_LOG_HOSTNAME || 'https://log-api.eu.newrelic.com';
+const API_HOSTNAME = process.env.KL_NR_LOG_HOSTNAME || 'log-api.eu.newrelic.com';
 const API_PATH = process.env.KL_NR_LOG_PATH || '/log/v1';
 const MAX_PAYLOAD_SIZE = 10**6;
 const MAX_ATTRIBUTES_PER_EVENT = 255;
@@ -120,8 +120,7 @@ export class NewRelicLogTransport extends Transport {
         this.internalLog('silly', 'Preparing final log payload for NR collector');
         const rawPayload = this.buildRawPostBody(logsToWrite);
         const compressedPayload = zlib.gzipSync(rawPayload);
-        // this.sendLogs(compressedPayload);
-        this.writeLogsToFileSystem(compressedPayload);
+        this.sendLogs(compressedPayload);
     }
 
     private logsWritten = 0;
@@ -135,8 +134,7 @@ export class NewRelicLogTransport extends Transport {
         this.internalLog('silly', 'Preparing log payload for NR collector');
         const rawPayload = this.buildRawPostBody(logsToWrite);
         const compressedPayload: Buffer = await this.compressPayload(rawPayload);
-        // this.sendLogs(compressedPayload);
-        this.writeLogsToFileSystem(compressedPayload);
+        this.sendLogs(compressedPayload);
     }
 
     private sendLogs(compressedPayload: Buffer) {
@@ -293,7 +291,6 @@ export class NewRelicLogTransport extends Transport {
 
         process.on('uncaughtException', (e) => {
             this.internalLog('error', e.stack || '');
-            process.exit(99);
         });
 
         process.on('SIGTERM', () => {
