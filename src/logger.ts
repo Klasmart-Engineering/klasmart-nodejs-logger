@@ -2,7 +2,7 @@
 import newrelicFormatter from '@newrelic/winston-enricher';
 import winston, { Logger } from 'winston';
 import { withCorrelation } from './correlationMiddleware';
-import { NewRelicLogForwarderTransport } from './newRelicLogForwarder';
+import { NewRelicLogTransport } from './newRelicLogForwarder';
 
 type NPMLoggingLevels = 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error';
 type LogStyle = 'STRING_COLOR' | 'STRING' | 'JSON' | 'SILENT';
@@ -13,6 +13,8 @@ const defaultLogStyle: LogStyle = logStyles[0];
 const stdoutFormat = winston.format.printf(({ level, message, label, timestamp }) => {
     return `${timestamp} [${label}] ${level}: ${message}`
 })
+
+let newRelicTransport: winston.transport;
 
 const correlationIdFormat = winston.format(info => {
     info.correlationId = withCorrelation();
@@ -52,18 +54,24 @@ export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
 }
 
 const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
+    console.log(`creating logger with label: ${label}`)
+    
+    if (!newRelicTransport) newRelicTransport = new NewRelicLogTransport({}, {});
+    
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
             correlationIdFormat(),
             winston.format.label({ label }),
             winston.format.timestamp(),
-            newrelicFormatter()
+            // process.env.NEW_RELIC_LICENSE_KEY 
+                newrelicFormatter()
+                // : winston.format.json()
         ),
-        
+
         transports: [
             new winston.transports.Console(),
-            NewRelicLogForwarderTransport()
+            newRelicTransport
         ]
     });
 }

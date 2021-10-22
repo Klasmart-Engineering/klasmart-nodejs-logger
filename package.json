@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@newrelic/winston-enricher": "^2.0.0",
+    "@types/newrelic": "^7.0.2",
+    "newrelic": "^8.5.0",
     "uuid": "^8.3.2",
     "winston": "^3.3.3"
   },
@@ -26,10 +28,11 @@
     "@types/supertest": "^2.0.11",
     "@types/uuid": "^8.3.1",
     "cz-conventional-changelog": "^3.3.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jest": "^27.2.5",
-    "supertest": "^6.1.6",
-    "standard-version": "^9.3.2"
+    "standard-version": "^9.3.2",
+    "supertest": "^6.1.6"
   },
   "config": {
     "commitizen": {
