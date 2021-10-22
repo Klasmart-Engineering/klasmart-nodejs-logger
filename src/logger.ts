@@ -2,7 +2,7 @@
 import newrelicFormatter from '@newrelic/winston-enricher';
 import winston, { Logger } from 'winston';
 import { withCorrelation } from './correlationMiddleware';
-import { NewRelicLogForwarderTransport } from './newRelicLogForwarder';
+import { NewRelicLogTransport } from './newRelicLogForwarder';
 
 type NPMLoggingLevels = 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error';
 type LogStyle = 'STRING_COLOR' | 'STRING' | 'JSON' | 'SILENT';
@@ -43,6 +43,7 @@ const defaultLoggingLevel = process.env.LOG_LEVEL ?? process.env.LEVEL ?? 'debug
 const [logStyle, message] = getLogStyleOption();
 
 export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
+    console.log(label);
     switch(logStyle) {
         case 'JSON': return createJsonLogger(label, level);
         case 'STRING': return createStringLogger(label, level);
@@ -52,6 +53,7 @@ export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
 }
 
 const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
+    console.log(label);
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
@@ -63,7 +65,7 @@ const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
         
         transports: [
             new winston.transports.Console(),
-            NewRelicLogForwarderTransport()
+            new NewRelicLogTransport({}, {})
         ]
     });
 }
