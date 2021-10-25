@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.14](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.13...v0.1.14) (2021-10-25)
+
+
+### Bug Fixes
+
+* add content encoding header. restructure log payload json to fix nesting issue. ([c4f69f4](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/c4f69f44ab6f255a5d7b444be66980f933b04ecf))
+
 ### [0.1.13](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.12...v0.1.13) (2021-10-25)
 
 
