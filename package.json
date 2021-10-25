@@ -1,6 +1,6 @@
 {
   "name": "kidsloop-nodejs-logger",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Logging utility built on top of Winston to provide logging functionality for NodeJS based Kidsloop apps",
   "main": "dist/index.js",
   "scripts": {
