@@ -63,6 +63,11 @@ export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
 }
 
 const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
+    const transports: winston.transport[] = [ new winston.transports.Console() ]
+    if (process.env.NEW_RELIC_LICENSE_KEY) {
+        transports.push(getNewRelicLogTransport());
+    }
+    
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
@@ -71,11 +76,7 @@ const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
             winston.format.timestamp(),
             newrelicFormatter()
         ),
-        
-        transports: [
-            new winston.transports.Console(),
-            getNewRelicLogTransport()
-        ]
+        transports
     });
 }
 

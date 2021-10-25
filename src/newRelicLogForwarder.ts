@@ -86,6 +86,7 @@ export class NewRelicLogTransport extends Transport {
     
     constructor(opts: NewRelicLogTransportOptions, globalAttributes: {[key: string]: string}) {
         super(opts);
+        this.setMaxListeners(Infinity);
         this.internalLog('info', 'creating new relic transport');
         this.globalAttributes = globalAttributes;
         this.config = {
