@@ -19,6 +19,17 @@ const correlationIdFormat = winston.format(info => {
     return info;
 });
 
+const getNewRelicLogTransport: () => NewRelicLogTransport = (() => {
+    let newRelicLogTransport: undefined | NewRelicLogTransport;
+    return () => {
+        if(!newRelicLogTransport) {
+            newRelicLogTransport = new NewRelicLogTransport({},{});
+        }
+        return newRelicLogTransport;
+    }
+
+})();
+
 const getLogStyleOption = (): [LogStyle, string] => {
     if (!process.env.LOG_STYLE) {
         return [
@@ -43,7 +54,6 @@ const defaultLoggingLevel = process.env.LOG_LEVEL ?? process.env.LEVEL ?? 'debug
 const [logStyle, message] = getLogStyleOption();
 
 export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
-    console.log(label);
     switch(logStyle) {
         case 'JSON': return createJsonLogger(label, level);
         case 'STRING': return createStringLogger(label, level);
@@ -53,7 +63,6 @@ export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
 }
 
 const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
-    console.log(label);
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
@@ -65,7 +74,7 @@ const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
         
         transports: [
             new winston.transports.Console(),
-            new NewRelicLogTransport({}, {})
+            getNewRelicLogTransport()
         ]
     });
 }
