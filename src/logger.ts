@@ -23,7 +23,9 @@ const getNewRelicLogTransport: () => NewRelicLogTransport = (() => {
     let newRelicLogTransport: undefined | NewRelicLogTransport;
     return () => {
         if(!newRelicLogTransport) {
-            newRelicLogTransport = new NewRelicLogTransport({},{});
+            newRelicLogTransport = new NewRelicLogTransport({
+                logPushFrequency: 5000
+            },{});
         }
         return newRelicLogTransport;
     }
