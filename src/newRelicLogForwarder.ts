@@ -167,24 +167,27 @@ export class NewRelicLogTransport extends Transport {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/gzip',
-                'X-License-Key': process.env.NEW_RELIC_LICENSE_KEY,
+                'Api-Key': process.env.NEW_RELIC_LICENSE_KEY,
                 'Accept': '*/*',
                 'Content-Length': compressedPayload.byteLength
             }
         });
 
-        req.on('connect', () => {
-            req.write(compressedPayload);
-        });
-
         req.on('response', response => {
-            if(response.statusCode === 200) {
+            if(response.statusCode && [202, 200].includes(response.statusCode)) {
                 return;
             } else {
                 this.internalLog('error', 'Error delivering logs to NR:');
                 this.internalLog('error', `${response.statusCode} - ${response.statusMessage}`)
             }
         });
+
+        req.on('error', (err) => {
+            this.internalLog('error', err.stack ?? 'Error writing logs to New Relic')
+        });
+
+        req.write(compressedPayload);
+        req.end();
     }
 
     private buildRawPostBody(logs: any[]): string {
