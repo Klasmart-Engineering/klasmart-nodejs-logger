@@ -201,7 +201,6 @@ export class NewRelicLogTransport extends Transport {
             },
             logs: logs
         }];
-        console.log(logs);
         return JSON.stringify(payload);
     }
 
@@ -262,27 +261,6 @@ export class NewRelicLogTransport extends Transport {
      * @returns 
      */
     private logTransform(log: any) {
-
-        // const attributes = {
-        //     level: log.level,
-        //     correlationId: log.correlationId,
-        //     label: log.label,
-        //     original_timestamp: log.original_timestamp,
-        //     'entity.name': log['entity.name'],
-        //     'entity.type': log['entity.type'],
-        //     hostname: log.hostname,
-        // }
-
-        // log.attributes = attributes;
-
-        // delete log.level;
-        // delete log.correlationId;
-        // delete log.label;
-        // delete log.original_timestamp;
-        // delete log['entity.name'];
-        // delete log['entity.type'];
-        // delete log.hostname;
-
         if (Object.getOwnPropertyNames(log).length > MAX_ATTRIBUTES_PER_EVENT) {
             this.internalLog('warn', `Log to send to JSON contains ${Object.getOwnPropertyNames(log)} / ${MAX_ATTRIBUTES_PER_EVENT} attributes.`);
         }
