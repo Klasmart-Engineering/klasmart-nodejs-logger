@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.15](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.14...v0.1.15) (2021-10-25)
+
+
+### Bug Fixes
+
+* remove unnecessary console.log, remove commented out code ([d5550cb](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/d5550cb2028e6bfd06ba6ceb9274a12c616d9c20))
+
 ### [0.1.14](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.13...v0.1.14) (2021-10-25)
 
 
