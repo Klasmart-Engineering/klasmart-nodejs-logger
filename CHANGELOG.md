@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.10...v0.1.11) (2021-10-25)
+
+
+### Bug Fixes
+
+* move babel-polyfill from dev to main dependencies ([b6b1c0d](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/b6b1c0d4d0dd04f079bc9670596b73753f31ba4d))
+
 ### [0.1.10](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.9...v0.1.10) (2021-10-25)
 
 
