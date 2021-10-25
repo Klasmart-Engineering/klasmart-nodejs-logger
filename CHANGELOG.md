@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.10](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.9...v0.1.10) (2021-10-25)
+
+
+### Bug Fixes
+
+* reenable log delivery, separate minimum delivery config between periodic and immediate log delivery, update default config values ([64ff31b](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/64ff31befa8638a8a622950dc05304a2951c13ab))
+
 ### [0.1.9](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.7-0...v0.1.9) (2021-10-25)
 
 
