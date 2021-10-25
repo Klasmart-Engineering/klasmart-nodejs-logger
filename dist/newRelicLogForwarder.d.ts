@@ -7,10 +7,18 @@ interface UniqueNewRelicLogTransportOptions {
      */
     logPushFrequency?: number;
     /**
-     * Minimum number of log statements written before logs can be pushed to NR.
-     * Default is undefined
+     * Minimum number of log statements written before logs can be pushed to NR
+     * by periodic logger.
+     * Default is 2
      */
     minLogItems?: number;
+    /**
+     * Minimum number of log statements to force an immediate push to NR. Used
+     * to ensure that the logging system does not get backed up if amount being
+     * logged surpasses the bandwidth of the periodic logger.
+     * Default is 100.
+     */
+    minLogItemsToForce?: number;
     /**
      * Minimum number of log statements to immediately trigger a push to NR.
      * Default is undefined
@@ -30,6 +38,13 @@ interface UniqueNewRelicLogTransportOptions {
      * Default is false.
      */
     warnOnAttributeLengthOverflow?: boolean;
+    /**
+     * Log level of internal logger, pass this value if you want the logger
+     * used in the NewRelicLogForwarder module to be different than the global
+     * default logging level.
+     * Default is undefined.
+     */
+    internalLogLevel?: 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error' | undefined;
 }
 declare type NewRelicLogTransportOptions = UniqueNewRelicLogTransportOptions & Transport.TransportStreamOptions;
 export declare class NewRelicLogTransport extends Transport {
@@ -59,6 +74,7 @@ export declare class NewRelicLogTransport extends Transport {
     private buildRawPostBody;
     private compressPayload;
     private sliceLogs;
+    private immediateLogWritablePredicate;
     private logsWritablePredicate;
     private minLogItemsExceeded;
     /**

@@ -20,10 +20,20 @@ interface UniqueNewRelicLogTransportOptions {
     logPushFrequency?: number;
 
     /**
-     * Minimum number of log statements written before logs can be pushed to NR.
-     * Default is undefined
+     * Minimum number of log statements written before logs can be pushed to NR
+     * by periodic logger.
+     * Default is 2
      */
     minLogItems?: number;
+
+
+    /**
+     * Minimum number of log statements to force an immediate push to NR. Used
+     * to ensure that the logging system does not get backed up if amount being
+     * logged surpasses the bandwidth of the periodic logger.
+     * Default is 100.
+     */
+    minLogItemsToForce?: number;
 
     /**
      * Minimum number of log statements to immediately trigger a push to NR.
@@ -47,6 +57,14 @@ interface UniqueNewRelicLogTransportOptions {
      * Default is false.
      */
     warnOnAttributeLengthOverflow?: boolean;
+
+    /**
+     * Log level of internal logger, pass this value if you want the logger
+     * used in the NewRelicLogForwarder module to be different than the global
+     * default logging level.
+     * Default is undefined.
+     */
+    internalLogLevel?: 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error' | undefined;
 }
 
 type NewRelicLogTransportOptions = UniqueNewRelicLogTransportOptions & Transport.TransportStreamOptions;
@@ -74,14 +92,17 @@ export class NewRelicLogTransport extends Transport {
             bytesWrittenThreshold: MAX_PAYLOAD_SIZE * 4 / 5,
             warnOnAttributeLengthOverflow: false,
             minBytesWritten: MAX_PAYLOAD_SIZE * 1 / 5,
-            minLogItems: 10,
-            logPushFrequency: 10000,
+            minLogItems: 2,
+            logPushFrequency: 60000,
             logCountThreshold: undefined,
+            minLogItemsToForce: 100,
+            internalLogLevel: undefined,
             ...opts
         };
 
         this.config.bytesWrittenThreshold = Math.min(this.config.bytesWrittenThreshold || 0, MAX_PAYLOAD_SIZE * 4 / 5);
-
+        if (log)
+        log?.transports.forEach(t => t.level = this.config.internalLogLevel);
         this.registerAppDeathLogPush();
         this.createLogCheckTimeout();
     }
@@ -109,15 +130,15 @@ export class NewRelicLogTransport extends Transport {
         this.logLengthQueue.push(length);
         this.totalLengthCount += length;
 
-        // if (this.logsWritablePredicate()) {
-        //     this.beginWriteLogs();
-        // }
+        if (this.immediateLogWritablePredicate()) {
+            this.beginWriteLogs();
+        }
         if (callback) callback();
     }
 
     private writeLogsSync() {
         const logsToWrite = this.sliceLogs();
-        this.internalLog('silly', 'Preparing final log payload for NR collector');
+        this.internalLog('silly', `Preparing final log payload of ${logsToWrite.length} for NR collector`);
         const rawPayload = this.buildRawPostBody(logsToWrite);
         const compressedPayload = zlib.gzipSync(rawPayload);
         this.sendLogs(compressedPayload);
@@ -131,38 +152,38 @@ export class NewRelicLogTransport extends Transport {
     private async beginWriteLogs() {
         const logsToWrite = this.sliceLogs();
 
-        this.internalLog('silly', 'Preparing log payload for NR collector');
+        this.internalLog('silly', `Preparing log payload of ${logsToWrite.length} for NR collector`);
         const rawPayload = this.buildRawPostBody(logsToWrite);
         const compressedPayload: Buffer = await this.compressPayload(rawPayload);
         this.sendLogs(compressedPayload);
     }
 
     private sendLogs(compressedPayload: Buffer) {
-        // const req = https.request({
-        //     hostname: API_HOSTNAME,
-        //     path: API_PATH,
-        //     port: 443,
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/gzip',
-        //         'X-License-Key': process.env.NEW_RELIC_LICENSE_KEY,
-        //         'Accept': '*/*',
-        //         'Content-Length': compressedPayload.byteLength
-        //     }
-        // });
+        const req = https.request({
+            hostname: API_HOSTNAME,
+            path: API_PATH,
+            port: 443,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/gzip',
+                'X-License-Key': process.env.NEW_RELIC_LICENSE_KEY,
+                'Accept': '*/*',
+                'Content-Length': compressedPayload.byteLength
+            }
+        });
 
-        // req.on('connect', () => {
-        //     req.write(compressedPayload);
-        // });
+        req.on('connect', () => {
+            req.write(compressedPayload);
+        });
 
-        // req.on('response', response => {
-        //     if(response.statusCode === 200) {
-        //         return;
-        //     } else {
-        //         this.internalLog('error', 'Error delivering logs to NR:');
-        //         this.internalLog('error', `${response.statusCode} - ${response.statusMessage}`)
-        //     }
-        // });
+        req.on('response', response => {
+            if(response.statusCode === 200) {
+                return;
+            } else {
+                this.internalLog('error', 'Error delivering logs to NR:');
+                this.internalLog('error', `${response.statusCode} - ${response.statusMessage}`)
+            }
+        });
     }
 
     private buildRawPostBody(logs: any[]): string {
@@ -210,6 +231,13 @@ export class NewRelicLogTransport extends Transport {
         this.logLengthQueue = this.logLengthQueue.slice(logSliceIndex);
 
         return logsToSend;
+    }
+
+    private immediateLogWritablePredicate(): boolean {
+        if (this.logQueue.length > (this.config.minLogItemsToForce || 100)) {
+            return true;
+        }
+        return false;
     }
 
     private logsWritablePredicate(): boolean {
@@ -267,7 +295,7 @@ export class NewRelicLogTransport extends Transport {
 
     private createLogCheckTimeout() {
         setTimeout(async () => {
-            if (this.logQueue.length > 0) {
+            if (this.logQueue.length > (this.config.minLogItems || 1)) {
                 await this.beginWriteLogs();
                 this.createLogCheckTimeout();
             }
@@ -299,7 +327,7 @@ export class NewRelicLogTransport extends Transport {
     }
 }
 
-(async () => {
+const createInternalLogger =(async () => {
     const { withLogger } = await import('./logger');
     log = withLogger('NewRelicLogForwarder');
     while(internalLogBuffer.length) {
