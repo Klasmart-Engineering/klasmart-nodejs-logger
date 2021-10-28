@@ -1,9 +1,11 @@
 import 'babel-polyfill';
-import { correlationMiddleware, withCorrelation } from './correlationMiddleware';
+import { correlationMiddleware, withCorrelation } from './correlation-middleware';
 import { withLogger } from './logger';
+import { NewRelicLogDeliveryAgent } from './LogDeliveryAgent';
 
 export {
     correlationMiddleware,
     withCorrelation,
-    withLogger
+    withLogger,
+    NewRelicLogDeliveryAgent
 };

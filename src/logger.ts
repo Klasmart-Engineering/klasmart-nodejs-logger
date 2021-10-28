@@ -1,36 +1,37 @@
 // @ts-ignore
 import newrelicFormatter from '@newrelic/winston-enricher';
 import winston, { Logger } from 'winston';
-import { withCorrelation } from './correlationMiddleware';
-import { NewRelicLogTransport } from './newRelicLogForwarder';
+import { withCorrelation } from './correlation-middleware';
+import { NewRelicLogTransport } from './NewRelicLogTransport';
+import { NewRelicLogDeliveryAgent } from './LogDeliveryAgent';
 
-type NPMLoggingLevels = 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error';
-type LogStyle = 'STRING_COLOR' | 'STRING' | 'JSON' | 'SILENT';
+export type NPMLoggingLevels = 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error';
+type LogStyle = 'STRING_COLOR' | 'STRING' | 'JSON' | 'SILENT' | 'NEW_RELIC';
 
-const logStyles: LogStyle[] = ['STRING_COLOR', 'STRING', 'JSON', 'SILENT'];
+// Queue for logs prior to logger creation
+const logStyles: LogStyle[] = ['STRING_COLOR', 'STRING', 'JSON', 'SILENT', 'NEW_RELIC'];
 const defaultLogStyle: LogStyle = logStyles[0];
 
 const stdoutFormat = winston.format.printf(({ level, message, label, timestamp }) => {
     return `${timestamp} [${label}] ${level}: ${message}`
-})
+});
 
 const correlationIdFormat = winston.format(info => {
     info.correlationId = withCorrelation();
     return info;
 });
 
-const getNewRelicLogTransport: () => NewRelicLogTransport = (() => {
-    let newRelicLogTransport: undefined | NewRelicLogTransport;
-    return () => {
-        if(!newRelicLogTransport) {
-            newRelicLogTransport = new NewRelicLogTransport({
-                logPushFrequency: 5000
-            },{});
-        }
-        return newRelicLogTransport;
+const getNewRelicLogTransport: () => NewRelicLogTransport | undefined = () => {
+    messages.push(['silly', 'Attempting retrieval of NewRelicLogDeliveryAgent instance']);
+    let instance = NewRelicLogDeliveryAgent.getInstance();
+    if (instance) {
+        return instance.getLogTransport();
     }
-
-})();
+    messages.push(['debug', 'No NewRelicLogDeliveryAgent defined, initializing instance']);
+    const transport = NewRelicLogDeliveryAgent.initialize()?.getLogTransport();
+    messages.push(['silly', `Transport created`]);
+    return transport;
+}
 
 const getLogStyleOption = (): [LogStyle, string] => {
     if (!process.env.LOG_STYLE) {
@@ -53,22 +54,39 @@ const getLogStyleOption = (): [LogStyle, string] => {
 }
 
 const defaultLoggingLevel = process.env.LOG_LEVEL ?? process.env.LEVEL ?? 'debug';
+const messages: [NPMLoggingLevels, string][] = [];
 const [logStyle, message] = getLogStyleOption();
-
+messages.push(['info', message]);
 export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
     switch(logStyle) {
-        case 'JSON': return createJsonLogger(label, level);
-        case 'STRING': return createStringLogger(label, level);
-        case 'STRING_COLOR': return createColorStringLogger(label, level);
-        case 'SILENT': return createSilentLogger(label, level);
+        case 'JSON':            return createJsonLogger(label, level);
+        case 'STRING':          return createStringLogger(label, level);
+        case 'STRING_COLOR':    return createColorStringLogger(label, level);
+        case 'SILENT':          return createSilentLogger(label, level);
+        case 'NEW_RELIC':       return createNewRelicLogger(label, level);
     }
 }
 
-const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
-    const transports: winston.transport[] = [ new winston.transports.Console() ]
-    if (process.env.NEW_RELIC_LICENSE_KEY) {
-        transports.push(getNewRelicLogTransport());
+const createNewRelicLogger = (label: string, level?: NPMLoggingLevels) => {
+    if (!process.env.NEW_RELIC_LICENSE_KEY) {
+        messages.push(['warn', 'NEW_RELIC logging style configured but NEW_RELIC_LICENSE_KEY is not defined! Falling back to JSON logger.']);
+        return createJsonLogger(label,level);
     }
+
+    return winston.loggers.add(label, {
+        level: level ?? defaultLoggingLevel,
+        format: winston.format.combine(
+            correlationIdFormat(),
+            winston.format.label({ label }),
+            winston.format.timestamp(),
+            newrelicFormatter()
+        ),
+        transports: [ getNewRelicLogTransport() as winston.transport ]
+    });
+}
+
+
+const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
     
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
@@ -78,7 +96,7 @@ const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
             winston.format.timestamp(),
             newrelicFormatter()
         ),
-        transports
+        transports: [ new winston.transports.Console() ]
     });
 }
 
@@ -124,5 +142,8 @@ const createSilentLogger = (label: string, level?: NPMLoggingLevels) => {
 }
 
 const log = withLogger('logger');
-log.info(message);
-winston
+messages.push(['debug', 'Internal logger initialized']);
+while(messages.length > 0) {
+    const [level, message] = messages.shift() as [NPMLoggingLevels, string];
+    log[level](message);
+}

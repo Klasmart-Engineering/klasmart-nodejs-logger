@@ -8,4 +8,4 @@ import { NextFunction, Request, Response } from 'express';
  */
 export declare function correlationMiddleware(header?: string): (request: Request, response: Response, next: NextFunction) => void;
 export declare function withCorrelation(): string | undefined;
-//# sourceMappingURL=correlationMiddleware.d.ts.map
+//# sourceMappingURL=correlation-middleware.d.ts.map
