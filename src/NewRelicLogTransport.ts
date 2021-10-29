@@ -5,6 +5,7 @@ export class NewRelicLogTransport extends Transport {
 
     constructor(logToAgentCallback: (log: any, callback: () => void) => void) {
         super()
+        this.setMaxListeners(Infinity);
         this.sendLogsToAgent = logToAgentCallback;
     }
 
