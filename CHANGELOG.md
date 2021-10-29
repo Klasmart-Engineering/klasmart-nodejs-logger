@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.0...v0.2.1) (2021-10-29)
+
+
+### Bug Fixes
+
+* add setMaxListeners to NewRelicTransport ([4f1b9ca](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/4f1b9caa2cfd32ee0a729d0e11eced13f68469f7))
+
 ## [0.2.0](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.16...v0.2.0) (2021-10-28)
 
 ### [0.1.16](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.1.15...v0.1.16) (2021-10-25)
