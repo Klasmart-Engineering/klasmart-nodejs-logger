@@ -29,6 +29,7 @@ const getNewRelicLogTransport: () => NewRelicLogTransport | undefined = () => {
     }
     messages.push(['debug', 'No NewRelicLogDeliveryAgent defined, initializing instance']);
     const transport = NewRelicLogDeliveryAgent.initialize()?.getLogTransport();
+    transport?.setMaxListeners(Infinity);
     messages.push(['silly', `Transport created`]);
     return transport;
 }
