@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.3...v0.2.4) (2021-11-02)
+
+
+### Bug Fixes
+
+* **log-delivery:** add warning log when configure is called prior to LogDeliveryAgent initialization ([ca4dc50](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/ca4dc500600761e078f578839e4657f7f1375aa1))
+
 ### [0.2.3](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.2...v0.2.3) (2021-10-29)
 
 
