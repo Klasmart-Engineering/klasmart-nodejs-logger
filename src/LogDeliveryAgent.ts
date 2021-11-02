@@ -108,7 +108,10 @@ export class NewRelicLogDeliveryAgent {
 
     public static configure(config: NewRelicLogDeliveryAgentConfig) {
         const instance = NewRelicLogDeliveryAgent.instance;
-        if (!instance) return;
+        if (!instance) {
+            internalLog('warn', 'Configure called before instance initialization. Configuration not applied');
+            return;
+        }
         instance.config = {
             ...defaultConfig,
             ...config
