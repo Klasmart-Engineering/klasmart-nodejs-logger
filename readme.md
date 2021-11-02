@@ -40,18 +40,26 @@ allLogs.silly('this log will be shown');
 ```
 
 ##### Environment Configuration
-LOG_STYLE - One of: [STRING_COLOR, STRING, JSON, SILENT]. Default: STRING_COLOR. Configures Winston format used for logs. Value explanation:
+LOG_STYLE - One of: [STRING_COLOR, STRING, JSON, SILENT, NEW_RELIC]. Default: STRING_COLOR. Configures Winston format used for logs. Value explanation:
 
 * STRING_COLOR: Provides simple string interpolated logs with color enhancement. Recommended for viewing logs in a local terminal.
 * STRING: Similar to STRING_COLOR format but lacks color encoding. Useful for environments where Strings are preferred but color encoding characters are not processed.
-* JSON: Logs are written in JSON format. Useful for injestion for automated tooling, aggregate logs. Recommended for deployed services.
+* JSON: Logs are written in JSON format. Reports logs in JSON format.
 * SILENT: Disabled logging mode. Useful for when you want to run code where logs may be clutter, for instance general unit test runs.
+* NEW_RELIC: JSON logs enhanced with the Winston New Relic log extender. When configured to NEW_RELIC a LogDeliveryAgent will be configured that will attempt to send logs written to winston and through stdout and stderr to New Relic. This is the recommended setting for deployed apps that are configured to use New Relic. Note: This setting will fall back to JSON if there is insufficient configuration for New Relic (lacking NEW_RELIC_LICENSE_KEY or NEW_RELIC_APP_NAME).
 
 
 LOG_LEVEL - One of: [silly, debug, verbose, http, info, warn, error]. Default: debug. Configures minimum log level for the application. Logger instances that are not provided specific log levels will log to this application default. The value is a mimimum. Logs at the specified level and above will be written and log statements below this level will not be written.
 
 LEVEL - Alternative to LOG_LEVEL provided for convenience when migrating from the `debug` logging library. If both LOG_LEVEL and LEVEL are defined, then the value of LOG_LEVEL will be used.
 
+KL_NR_LOG_HOSTNAME - Hostname for New Relic Log API. Defaults to `log-api.eu.newrelic.com`.
+
+KL_NR_LOG_PATH - Path part of New Relic Log API. Defaults to `/log/v1`.
+
+LOG_DELIVERY_AGENT_LEVEL - Value read to configure the logging level of the LogDeliveryAgent. Useful for debugging the behavior of log delivery. Should be one of values listed in the Logging Levels section. Defaults to 'warn'.
+
+DEBUG_WRITE_LOGS_TO_FILE - When set to 'true' the LogDeliveryAgent will write logs to a debug file rather than sending them to NewRelic. Useful for debugging LogDeliveryAgent's behavior. Not recommended for general usage.
 
 ### Correlation ID Middleware
 
@@ -83,3 +91,19 @@ const correlationId = withCorrelation();
 ```
 
 Note: Correlation IDs are only available within the scope of a request. Logs written outside of this scope will have no correlation ID and calls to withCorrelation will return undefined in this scenario.
+
+
+### Log Delivery
+This module includes functionality to collect and deliver logs to New Relic when sufficient configuration exists. Logs are collected both from logs directly written to Winston and logs written to stdout/stderr. Logs from Winston will be delivered even if they are not being written to stdout.
+
+In order to enable log delivery, the application must have sufficient configuration to enable the newrelic module (NEW_RELIC_LICENSE_KEY and NEW_RELIC_APP_NAME must be defined) and the logging mode must be configured to NEW_RELIC. If this is defined, then an instance of LogDeliveryAgent will be configured. The LogDeliveryAgent exposes a Winston transport to feed logs to itself and creates stdout/stderr bypasses to collect logs written using the default console and process.stdout.write(...)/.stderr.write(...) functions.
+
+In order to maximize log collection, the LogDeliveryAgent will start up immediately upon the import of the withLogger function. Generally it is recommended to do this right after the newrelic module is imported or soon after. The LogDeliveryAgent assumes a default configuration upon initialization so that it can begin collecting logs, but this configuration can be altered at any time by importing the agent:
+
+```
+import { LogDeliveryAgent } from 'kidsloop-nodejs-logger';
+
+LogDeliveryAgent.getInstance().configure({ ...configuration })
+```
+
+See NewRelicLogDeliveryAgentConfig for configuration options.
