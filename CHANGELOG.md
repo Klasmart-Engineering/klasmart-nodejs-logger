@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.4...v0.2.5) (2021-11-03)
+
+
+### Bug Fixes
+
+* fix log delivery agent marshalling of messages added via stdout/stderr, add additional metadata to these operations ([cb5eec1](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/cb5eec1e8640db51a898d996020b8a625e36347a))
+
 ### [0.2.4](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.3...v0.2.4) (2021-11-02)
 
 
