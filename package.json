@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@newrelic/winston-enricher": "^2.0.0",
+    "@types/newrelic": "^7.0.2",
     "babel-polyfill": "^6.26.0",
     "newrelic": "^8.5.0",
     "uuid": "^8.3.2",

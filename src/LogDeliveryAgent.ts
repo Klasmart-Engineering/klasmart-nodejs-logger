@@ -1,5 +1,6 @@
 import fs from 'fs';
 import https from 'http';
+import newrelic from 'newrelic';
 import zlib from 'zlib';
 import { NewRelicLogTransport } from './NewRelicLogTransport';
 import { PassThrough } from 'stream';
@@ -266,12 +267,19 @@ export class NewRelicLogDeliveryAgent {
         if (typeof log === 'string' && log.endsWith('\n')) {
             log = log.substring(0, log.length - 1);
         }
+        const newRelicMetadata = newrelic.getLinkingMetadata();
         const structuredLog = {
-            message: log
+            message: log,
+            timestamp: Date.now(),
+            original_timestamp: new Date().toISOString(),
+            "entity.name": newRelicMetadata['entity.name'],
+            "entity.type": newRelicMetadata['entity.type'],
+            hostname: newRelicMetadata.hostname
         }
+
         const jsonLogString = JSON.stringify(structuredLog);
         const length = Buffer.byteLength(jsonLogString);
-        this.logQueue.push(jsonLogString);
+        this.logQueue.push(structuredLog);
         this.logLengthQueue.push(length);
         this.totalLengthCount += length;
 
