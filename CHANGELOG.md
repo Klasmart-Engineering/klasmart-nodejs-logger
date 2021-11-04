@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.10](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.9...v0.2.10) (2021-11-04)
+
+
+### Features
+
+* LogDeliveryAgent wait for entity.guid to be available before pushing logs, include guid as 'entityGuid' globally ([1a13e1d](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/1a13e1dfe2eb091cc5a7dc4286e2de703f6a7530))
+
 ### [0.2.9](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.8...v0.2.9) (2021-11-04)
 
 
