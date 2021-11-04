@@ -127,6 +127,7 @@ export class NewRelicLogDeliveryAgent {
     private debugMode = process.env.DEBUG_WRITE_LOGS_TO_FILE === 'true';
     private timeoutId: NodeJS.Timeout | undefined;
     private logsWritten = 0;
+    private newRelicInitialized = false;
     
     public standardOutPassThrough: StandardOutPassThrough;
     
@@ -152,7 +153,10 @@ export class NewRelicLogDeliveryAgent {
         this.standardOutPassThrough = new StandardOutPassThrough(logCallback, errCallback);
         this.registerAppDeathLogPush();
         this.createLogCheckTimeout();
+        this.registerNewRelicInitializationInterval();      
         internalLog('debug', 'LogDeliveryAgent Initialized')
+
+
     }
 
     /**
@@ -377,7 +381,8 @@ export class NewRelicLogDeliveryAgent {
             common: {
                 attributes: {
                     ...this.globalAttributes,
-                    service: process.env.NEW_RELIC_APP_NAME
+                    service: process.env.NEW_RELIC_APP_NAME,
+                    entityGuid: newrelic.getLinkingMetadata()['entity.guid'],
                 },
             },
             logs: logs
@@ -437,7 +442,12 @@ export class NewRelicLogDeliveryAgent {
      * @returns boolean
      */
     private immediateLogWritablePredicate(): boolean {
-        if (this.logQueue.length > (this.config.minLogItemsToForce || 100)) {
+        if (this.newRelicInitialized && this.logQueue.length > (this.config.minLogItemsToForce || 100)) {
+            return true;
+        }
+
+        // Push logs even if new relic hasn't been initialized if the backlog grows too large
+        if (this.logQueue.length > 500) {
             return true;
         }
         return false;
@@ -547,6 +557,23 @@ export class NewRelicLogDeliveryAgent {
             if (this.timeoutId) clearTimeout(this.timeoutId);
             this.writeLogsSync();
         })
+    }
+
+    /**
+     * New Relic does not expose a method to check its initialization status
+     * If we push logs before New Relic initializes, they will not have an attached
+     * entity guid.  For this reason we will initialize an interval that can run until
+     * it is initialized.
+     */
+    private registerNewRelicInitializationInterval() {
+        const newRelicInitializationCheckTimeout = setInterval(() => {
+            const metadata = newrelic.getLinkingMetadata();
+            if (metadata['entity.guid']) {
+                this.newRelicInitialized = true;
+                internalLog('info', 'Detected New Relic has initialized with entity.guid');
+                clearInterval(newRelicInitializationCheckTimeout);
+            }
+        }, 100);
     }
 }
 

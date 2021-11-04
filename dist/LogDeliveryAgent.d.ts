@@ -55,6 +55,7 @@ export declare class NewRelicLogDeliveryAgent {
     private debugMode;
     private timeoutId;
     private logsWritten;
+    private newRelicInitialized;
     standardOutPassThrough: StandardOutPassThrough;
     private constructor();
     /**
@@ -185,6 +186,13 @@ export declare class NewRelicLogDeliveryAgent {
      * final logs can be pushed
      */
     private registerAppDeathLogPush;
+    /**
+     * New Relic does not expose a method to check its initialization status
+     * If we push logs before New Relic initializes, they will not have an attached
+     * entity guid.  For this reason we will initialize an interval that can run until
+     * it is initialized.
+     */
+    private registerNewRelicInitializationInterval;
 }
 /**
  * Replaces existing writers for stdout and stderr with
