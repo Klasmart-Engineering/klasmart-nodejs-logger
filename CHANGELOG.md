@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.8](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.7...v0.2.8) (2021-11-04)
+
+
+### Features
+
+* add logic to stip ansi encoding in string logs ([6a1ca83](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/6a1ca83e75444f4bb96f98fbdd9bf5441c76b32e))
+
 ### [0.2.7](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.6...v0.2.7) (2021-11-04)
 
 
