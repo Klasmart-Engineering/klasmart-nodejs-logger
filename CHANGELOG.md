@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.9](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.8...v0.2.9) (2021-11-04)
+
+
+### Bug Fixes
+
+* fix incorrect log push that caused failure to deliver first set of logs ([8ae8f1d](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/8ae8f1de137e68f42045af99e1267d1815a5efb3))
+
 ### [0.2.8](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.7...v0.2.8) (2021-11-04)
 
 
