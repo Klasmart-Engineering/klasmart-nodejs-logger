@@ -1,11 +1,12 @@
 import fs from 'fs';
-import https from 'http';
+import https, { request } from 'http';
 import newrelic from 'newrelic';
 import zlib from 'zlib';
 import { NewRelicLogTransport } from './NewRelicLogTransport';
-import { PassThrough } from 'stream';
+import { PassThrough, Readable } from 'stream';
 import { Logger } from 'winston';
 import { NPMLoggingLevels } from './logger';
+import Axios from 'axios';
 
 const API_HOSTNAME = process.env.KL_NR_LOG_HOSTNAME || 'log-api.eu.newrelic.com';
 const API_PATH = process.env.KL_NR_LOG_PATH || '/log/v1';
@@ -54,12 +55,7 @@ export interface NewRelicLogDeliveryAgentConfig {
       * Default is 100.
       */
      minLogItemsToForce?: number;
- 
-     /**
-      * Minimum number of log statements to immediately trigger a push to NR.
-      * Default is undefined
-      */
-     logCountThreshold?: number | undefined;
+
  
      /**
       * Minimum number of bytes written to compression stream before pushing to NR
@@ -85,7 +81,6 @@ const defaultConfig: NewRelicLogDeliveryAgentConfig = {
     minBytesWritten: MAX_PAYLOAD_SIZE * 1 / 5,
     minLogItems: 2,
     logPushFrequency: 60000,
-    logCountThreshold: undefined,
     minLogItemsToForce: 100,
 }
 
@@ -114,7 +109,7 @@ export class NewRelicLogDeliveryAgent {
             return;
         }
         instance.config = {
-            ...defaultConfig,
+            ...instance.config,
             ...config
         }
     }
@@ -230,7 +225,7 @@ export class NewRelicLogDeliveryAgent {
         }
 
         if (this.immediateLogWritablePredicate()) {
-            this.beginWriteLogs();
+            this.writeLogsSync();
         }
 
         if (jsonData) log = JSON.stringify(log)+'\n';
@@ -323,11 +318,17 @@ export class NewRelicLogDeliveryAgent {
 
         internalLog('silly', `Preparing log payload of ${logsToWrite.length} for NR collector`);
         const rawPayload = this.buildRawPostBody(logsToWrite);
-        const compressedPayload: Buffer = await this.compressPayload(rawPayload);
-        if (!this.debugMode) {
-            this.sendLogs(compressedPayload);
-        } else {
-            this.writeLogsToFileSystem(compressedPayload);
+        try {
+            const compressedPayload: Buffer = await this.compressPayload(rawPayload);
+            if (!this.debugMode) {
+                this.sendLogs(compressedPayload);
+            } else {
+                this.writeLogsToFileSystem(compressedPayload);
+            }
+        } catch (err) {
+            const fallbackMessage = 'Unknown error occurred while compressing logs to send to New Relic';
+            const message = err instanceof Error && err.stack ? err.stack : fallbackMessage; 
+            internalLog('error', message)
         }
     }
 
@@ -337,35 +338,25 @@ export class NewRelicLogDeliveryAgent {
      * @param compressedPayload 
      */
     private sendLogs(compressedPayload: Buffer) {
-        const req = https.request({
-            hostname: API_HOSTNAME,
-            path: API_PATH,
-            port: 443,
-            method: 'POST',
+        Axios.post(`https://${API_HOSTNAME}${API_PATH}`, compressedPayload, {
             headers: {
                 'Accept': '*/*',
-                'Api-Key': process.env.NEW_RELIC_LICENSE_KEY,
+                'Api-Key': process.env.NEW_RELIC_LICENSE_KEY as string,
                 'Content-Encoding': 'gzip',
-                'Content-Length': compressedPayload.byteLength,
+                'Content-Length': ''+compressedPayload.byteLength,
                 'Content-Type': 'application/gzip',
             }
-        });
-
-        req.on('response', response => {
-            if(response.statusCode && [202, 200].includes(response.statusCode)) {
-                return;
+        }).then(response => {
+            if ([200, 202].includes(response.status)) {
+                internalLog('silly', `Log payload accepted by New Relic API. Request ID: ${response.data.requestId}`)
             } else {
-                internalLog('error', 'Error delivering logs to NR:');
-                internalLog('error', `${response.statusCode} - ${response.statusMessage}`)
+                internalLog('warn', `Unexpected successful response status code from NR: ${response.status}`)
             }
-        });
 
-        req.on('error', (err) => {
-            internalLog('error', err.stack ?? 'Error writing logs to New Relic')
-        });
-
-        req.write(compressedPayload);
-        req.end();
+        }).catch(err => {
+            internalLog('error', 'Error sending log payload to New Relic');
+            internalLog('error', err.stack)
+        })
     }
 
     /**

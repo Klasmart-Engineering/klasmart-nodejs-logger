@@ -20,11 +20,6 @@ export interface NewRelicLogDeliveryAgentConfig {
      */
     minLogItemsToForce?: number;
     /**
-     * Minimum number of log statements to immediately trigger a push to NR.
-     * Default is undefined
-     */
-    logCountThreshold?: number | undefined;
-    /**
      * Minimum number of bytes written to compression stream before pushing to NR
      */
     minBytesWritten?: number;
