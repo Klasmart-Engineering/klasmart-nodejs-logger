@@ -6,8 +6,6 @@ import { PassThrough } from 'stream';
 import { Logger } from 'winston';
 import { NPMLoggingLevels } from './logger';
 import Axios from 'axios';
-import hasAnsi from 'has-ansi';
-import stripAnsi from 'strip-ansi';
 
 const API_HOSTNAME = process.env.KL_NR_LOG_HOSTNAME || 'log-api.eu.newrelic.com';
 const API_PATH = process.env.KL_NR_LOG_PATH || '/log/v1';
@@ -136,7 +134,7 @@ export class NewRelicLogDeliveryAgent {
         internalLog('debug', 'Initializing LogDeliveryAgent');
         this.config = { ...defaultConfig };
 
-        this.logQueue.push(`Creating NewRelicLogTransport`);
+        internalLog('info', `Creating NewRelicLogTransport`);
         this.newRelicLogTransport = new NewRelicLogTransport((log, cb) => this.addLog(log, cb));
 
         // Creates logging configuration for rewriting stdout/stderr
@@ -197,8 +195,15 @@ export class NewRelicLogDeliveryAgent {
         }
         try {
             const obj = JSON.parse(str as string);
+            // Rewrite bootstrap object into a format that will work for new relic
+            if (obj.msg && obj?.name('newrelic_bootstrap') && !obj.message) {
+                obj.message = obj.msg;
+                obj.level = 'info';
+                delete obj.msg;
+            }
             if (obj && typeof obj === "object") {
                 if (obj.message && obj.level) {
+                    
                     return obj;
                 }
             }
@@ -264,11 +269,6 @@ export class NewRelicLogDeliveryAgent {
             log = log.substring(0, log.length - 1);
         }
 
-        // Strip ANSI color encoding from string if present
-        if (hasAnsi(log)) {
-           log = stripAnsi(log);
-        }
-
         const newRelicMetadata = newrelic.getLinkingMetadata();
         const structuredLog = {
             message: log,
@@ -284,7 +284,6 @@ export class NewRelicLogDeliveryAgent {
         this.logQueue.push(structuredLog);
         this.logLengthQueue.push(length);
         this.totalLengthCount += length;
-
     }
     
     /**
