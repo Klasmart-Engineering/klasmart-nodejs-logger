@@ -1,12 +1,13 @@
 import fs from 'fs';
-import https, { request } from 'http';
 import newrelic from 'newrelic';
 import zlib from 'zlib';
 import { NewRelicLogTransport } from './NewRelicLogTransport';
-import { PassThrough, Readable } from 'stream';
+import { PassThrough } from 'stream';
 import { Logger } from 'winston';
 import { NPMLoggingLevels } from './logger';
 import Axios from 'axios';
+import hasAnsi from 'has-ansi';
+import stripAnsi from 'strip-ansi';
 
 const API_HOSTNAME = process.env.KL_NR_LOG_HOSTNAME || 'log-api.eu.newrelic.com';
 const API_PATH = process.env.KL_NR_LOG_PATH || '/log/v1';
@@ -262,6 +263,12 @@ export class NewRelicLogDeliveryAgent {
         if (typeof log === 'string' && log.endsWith('\n')) {
             log = log.substring(0, log.length - 1);
         }
+
+        // Strip ANSI color encoding from string if present
+        if (hasAnsi(log)) {
+           log = stripAnsi(log);
+        }
+
         const newRelicMetadata = newrelic.getLinkingMetadata();
         const structuredLog = {
             message: log,
