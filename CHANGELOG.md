@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.6...v0.2.7) (2021-11-04)
+
+
+### Bug Fixes
+
+* reconfigured immediate log send logic to use async sending logic ([64ee99b](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/64ee99b1c762dd23b3cb2e94d5b490f06b1823ef))
+
 ### [0.2.6](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.5...v0.2.6) (2021-11-04)
 
 
