@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.6](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.5...v0.2.6) (2021-11-04)
+
+
+### Bug Fixes
+
+* resolves issues with https payload not fully writing ([310dc0e](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/310dc0ec1065db99c814a167512b9e02582ca2c7))
+
 ### [0.2.5](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.4...v0.2.5) (2021-11-03)
 
 
