@@ -225,7 +225,7 @@ export class NewRelicLogDeliveryAgent {
         }
 
         if (this.immediateLogWritablePredicate()) {
-            this.writeLogsSync();
+            this.beginWriteLogs();
         }
 
         if (jsonData) log = JSON.stringify(log)+'\n';
