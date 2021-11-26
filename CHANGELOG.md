@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.11](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.10...v0.2.11) (2021-11-26)
+
+
+### Features
+
+* **metadata:** support for metadata objects to embed data into payload when using a compatible log style (JSON, NEW_RELIC) ([7ca8b74](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/7ca8b74fe2357e83ac46c7e898504d63e3a32825))
+
+
+### Bug Fixes
+
+* add additional case handling to ensure case insensitivity for log style ([5b2852a](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/5b2852a153b67c3e82c3bebb9b66d8e89c6ae590))
+
 ### [0.2.10](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.9...v0.2.10) (2021-11-04)
 
 
