@@ -80,6 +80,7 @@ const createNewRelicLogger = (label: string, level?: NPMLoggingLevels) => {
             correlationIdFormat(),
             winston.format.label({ label }),
             winston.format.timestamp(),
+            winston.format.metadata({ fillExcept: ['message', 'level', 'timestamp', 'label']}),
             newrelicFormatter()
         ),
         transports: [ getNewRelicLogTransport() as winston.transport ]
@@ -95,6 +96,7 @@ const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
             correlationIdFormat(),
             winston.format.label({ label }),
             winston.format.timestamp(),
+            winston.format.metadata({ fillExcept: ['message', 'level', 'timestamp', 'label']}),
             newrelicFormatter()
         ),
         transports: [ new winston.transports.Console() ]
@@ -108,6 +110,7 @@ const createStringLogger = (label: string, level?: NPMLoggingLevels) => {
             correlationIdFormat(),
             winston.format.label({ label }),
             winston.format.timestamp(),
+            winston.format.metadata({ fillExcept: ['message', 'level', 'timestamp', 'label']}),
             stdoutFormat
         ),
         transports: [
@@ -123,6 +126,7 @@ const createColorStringLogger = (label: string, level?: NPMLoggingLevels) => {
             correlationIdFormat(),
             winston.format.label({ label }),
             winston.format.timestamp(),
+            winston.format.metadata({ fillExcept: ['message', 'level', 'timestamp', 'label']}),
             winston.format.colorize(),
             stdoutFormat
         ),
