@@ -43,8 +43,8 @@ const getLogStyleOption = (): [LogStyle, string] => {
 
     if (logStyles.includes(process.env.LOG_STYLE.toUpperCase().trim() as LogStyle)) {
         return [
-            process.env.LOG_STYLE as LogStyle,
-            `Using log style: ${process.env.LOG_STYLE}`
+            process.env.LOG_STYLE.toUpperCase() as LogStyle,
+            `Using log style: ${process.env.LOG_STYLE.toUpperCase()}`
         ];
     }
 
@@ -59,12 +59,13 @@ const messages: [NPMLoggingLevels, string][] = [];
 const [logStyle, message] = getLogStyleOption();
 messages.push(['info', message]);
 export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
-    switch(logStyle) {
+    switch(logStyle.toUpperCase()) {
         case 'JSON':            return createJsonLogger(label, level);
         case 'STRING':          return createStringLogger(label, level);
-        case 'STRING_COLOR':    return createColorStringLogger(label, level);
         case 'SILENT':          return createSilentLogger(label, level);
         case 'NEW_RELIC':       return createNewRelicLogger(label, level);
+        default:                
+        case 'STRING_COLOR':    return createColorStringLogger(label, level);
     }
 }
 
