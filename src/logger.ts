@@ -5,6 +5,7 @@ import { withCorrelation } from './correlation-middleware';
 import { NewRelicLogTransport } from './NewRelicLogTransport';
 import { NewRelicLogDeliveryAgent } from './LogDeliveryAgent';
 
+export type KLLogger = winston.Logger
 export type NPMLoggingLevels = 'silly' | 'debug' | 'verbose' | 'http' | 'info' | 'warn' | 'error';
 type LogStyle = 'STRING_COLOR' | 'STRING' | 'JSON' | 'SILENT' | 'NEW_RELIC';
 
@@ -77,9 +78,7 @@ const createNewRelicLogger = (label: string, level?: NPMLoggingLevels) => {
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
-            correlationIdFormat(),
-            winston.format.label({ label }),
-            winston.format.timestamp(),
+            ...defaultLoggers(label),
             newrelicFormatter()
         ),
         transports: [ getNewRelicLogTransport() as winston.transport ]
@@ -92,9 +91,7 @@ const createJsonLogger = (label: string, level?: NPMLoggingLevels) => {
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
-            correlationIdFormat(),
-            winston.format.label({ label }),
-            winston.format.timestamp(),
+            ...defaultLoggers(label),
             newrelicFormatter()
         ),
         transports: [ new winston.transports.Console() ]
@@ -105,9 +102,7 @@ const createStringLogger = (label: string, level?: NPMLoggingLevels) => {
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
-            correlationIdFormat(),
-            winston.format.label({ label }),
-            winston.format.timestamp(),
+            ...defaultLoggers(label),
             stdoutFormat
         ),
         transports: [
@@ -120,9 +115,7 @@ const createColorStringLogger = (label: string, level?: NPMLoggingLevels) => {
     return winston.loggers.add(label, {
         level: level ?? defaultLoggingLevel,
         format: winston.format.combine(
-            correlationIdFormat(),
-            winston.format.label({ label }),
-            winston.format.timestamp(),
+            ...defaultLoggers(label),
             winston.format.colorize(),
             stdoutFormat
         ),
@@ -141,6 +134,14 @@ const createSilentLogger = (label: string, level?: NPMLoggingLevels) => {
         ]
     });
 }
+
+
+const defaultLoggers = (label: string): winston.Logform.Format[] => [
+    correlationIdFormat(),
+    winston.format.label({ label }),
+    winston.format.timestamp(),
+    winston.format.splat(),
+] 
 
 const log = withLogger('logger');
 messages.push(['debug', 'Internal logger initialized']);
