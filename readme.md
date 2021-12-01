@@ -101,9 +101,9 @@ In order to enable log delivery, the application must have sufficient configurat
 In order to maximize log collection, the LogDeliveryAgent will start up immediately upon the import of the withLogger function. Generally it is recommended to do this right after the newrelic module is imported or soon after. The LogDeliveryAgent assumes a default configuration upon initialization so that it can begin collecting logs, but this configuration can be altered at any time by importing the agent:
 
 ```
-import { LogDeliveryAgent } from 'kidsloop-nodejs-logger';
+import { NewRelicLogDeliveryAgent } from 'kidsloop-nodejs-logger';
 
-LogDeliveryAgent.getInstance().configure({ ...configuration })
+NewRelicLogDeliveryAgent.configure({})
 ```
 
 See NewRelicLogDeliveryAgentConfig for configuration options.
