@@ -103,6 +103,7 @@ In order to maximize log collection, the LogDeliveryAgent will start up immediat
 ```
 import { NewRelicLogDeliveryAgent } from 'kidsloop-nodejs-logger';
 
+NewRelicLogDeliveryAgent.initialize()
 NewRelicLogDeliveryAgent.configure({})
 ```
 
