@@ -61,6 +61,8 @@ LOG_DELIVERY_AGENT_LEVEL - Value read to configure the logging level of the LogD
 
 DEBUG_WRITE_LOGS_TO_FILE - When set to 'true' the LogDeliveryAgent will write logs to a debug file rather than sending them to NewRelic. Useful for debugging LogDeliveryAgent's behavior. Not recommended for general usage.
 
+SERVICE_LABEL - Optional. Used to provide a 'service' label for logs delivered to New Relic.  This is the highest priority value for the service label, if not provided it will fallback to component tags in NEW_RELIC_LABELS, the value of NEW_RELIC_APP_NAME, and then 'undefined' in that order.
+
 ### Correlation ID Middleware
 
 #### Purpose
@@ -105,5 +107,21 @@ import { LogDeliveryAgent } from 'kidsloop-nodejs-logger';
 
 LogDeliveryAgent.getInstance().configure({ ...configuration })
 ```
+
+Logs are labeled with several pieces of metadata to help with aggregating and filtering logs on New Relic.  The general recommendation is to ensure that deployed services include a NEW_RELIC_LABEL environment variable with the following properties correctly defined:
+
+* Component
+* Environment
+* Region
+* Version
+
+This values will be read and included as global log parameters when payloads are sent to the NR under the following labels:
+
+* service
+* environment
+* region
+* version
+
+This allows for aggregation and filtering along several dimensions as well as easily confirming deployment details of the service when looking at logs. For example, filtering logs to only the pdf-service alpha deployments could be done by including the following in the NR logs toolbar: `"service":"pdf-service" "environment":"alpha"`
 
 See NewRelicLogDeliveryAgentConfig for configuration options.

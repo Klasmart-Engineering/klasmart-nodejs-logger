@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.11](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.10...v0.2.11) (2021-12-02)
+
+
+### Features
+
+* **KLL-2185:** when available, uses SERVICE_LABEL for service metadata, attempts to also add version, region, and environment from NEW_RELIC_LABELS ([afb4f8e](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/afb4f8eb3ac382700321198ee32b7df8a75ba537))
+
+
+### Bug Fixes
+
+* **KLL-2185:** fix logical problem related to service name assignment ([0976c22](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/0976c2217257fbd99f7d5ba8a96b8e9cd1c9e3da))
+
 ### [0.2.10](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.9...v0.2.10) (2021-11-04)
 
 
