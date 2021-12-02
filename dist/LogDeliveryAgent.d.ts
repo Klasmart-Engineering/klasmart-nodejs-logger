@@ -35,6 +35,10 @@ export interface NewRelicLogDeliveryAgentConfig {
     warnOnAttributeLengthOverflow?: boolean;
 }
 export declare class NewRelicLogDeliveryAgent {
+    private appLabel;
+    private regionLabel;
+    private environmentLabel;
+    private versionLabel;
     /**
      * Initializes a NewRelicLogDeliveryAgent instance if the LOG_STYLE environment
      * variable is set to NEW_RELIC. Otherwise it does nothing.
