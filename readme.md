@@ -1,6 +1,6 @@
 # Kidsloop NodeJS Logger
 
-This is a utility logging package that wraps around Winston logger. The goal of this module is to provide an easy to use package that will produce consistent logging for aggregation while also allowing for formats that are convenient for local development work. Additionally, the module can assist with distributed tracing by providing a mechanism for propagating correlation data for consumption by New Relic.
+This is a utility logging package that wraps around [Winston logger](https://github.com/winstonjs/winston). The goal of this module is to provide an easy to use package that will produce consistent logging for aggregation while also allowing for formats that are convenient for local development work. Additionally, the module can assist with distributed tracing by providing a mechanism for propagating correlation data for consumption by New Relic.
 
 ## Usage
 
@@ -14,6 +14,10 @@ import { withLogger } from 'kidsloop-nodejs-logger';
 const log = withLogger('my-module');
 
 log.info('logger configured');
+
+// with string interpolation
+// outputs "info: test message first second"
+logger.log('info', 'test message %s, %s', 'first', 'second');
 ```
 
 #### Logging Levels
