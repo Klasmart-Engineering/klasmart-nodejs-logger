@@ -161,33 +161,43 @@ export class NewRelicLogDeliveryAgent {
         this.registerNewRelicInitializationInterval();      
         internalLog('debug', 'LogDeliveryAgent Initialized')
 
-        // Parse environment for labels - Use SERVICE_LABEL if available in env
+        const serviceLabel = process.env.SERVICE_LABEL;
+        let component;
         const labels = process.env.NEW_RELIC_LABELS;
         if (labels) {
             const parts = labels.split(';');
             const labelMap = new Map<string, string>();
             parts.forEach(part => {
                 const [label, value] = part.split(':');
-                labelMap.set(label, value);
+                labelMap.set(label.toLowerCase(), value);
             });
 
-            if (labelMap.has('Region')) {
-                this.regionLabel = labelMap.get('Region') as string;
+            if (labelMap.has('region')) {
+                this.regionLabel = labelMap.get('region') as string;
             }
 
-            if (labelMap.has('Environment')) {
-                this.environmentLabel = labelMap.get('Environment') as string;
+            if (labelMap.has('environment')) {
+                this.environmentLabel = labelMap.get('environment') as string;
             }
 
-            if (labelMap.has('Version')) {
-                this.versionLabel = labelMap.get('Version') as string;
+            if (labelMap.has('version')) {
+                this.versionLabel = labelMap.get('version') as string;
             }
 
-            this.appLabel = process.env.SERVICE_LABEL
-                || labelMap.get('Component') 
-                || process.env.NEW_RELIC_APP_NAME
-                || 'undefined';
+            component = labelMap.get('component');
         }
+
+        /* 
+            Assign label name using the following priorities:
+            1. SERVICE_LABEL env value
+            2. NEW_RELIC_LABELS env value component part
+            3. NEW_RELIC_APP_NAME env value
+            4. undefined literal
+        */
+        this.appLabel = serviceLabel
+            || component
+            || process.env.NEW_RELIC_APP_NAME
+            || 'undefined';
     }
 
     /**
