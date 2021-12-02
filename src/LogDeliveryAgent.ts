@@ -162,7 +162,6 @@ export class NewRelicLogDeliveryAgent {
         internalLog('debug', 'LogDeliveryAgent Initialized')
 
         // Parse environment for labels - Use SERVICE_LABEL if available in env
-        this.appLabel = process.env.SERVICE_LABEL || process.env.NEW_RELIC_APP_NAME as string;
         const labels = process.env.NEW_RELIC_LABELS;
         if (labels) {
             const parts = labels.split(';');
@@ -183,6 +182,11 @@ export class NewRelicLogDeliveryAgent {
             if (labelMap.has('Version')) {
                 this.versionLabel = labelMap.get('Version') as string;
             }
+
+            this.appLabel = process.env.SERVICE_LABEL
+                || labelMap.get('Component') 
+                || process.env.NEW_RELIC_APP_NAME
+                || 'undefined';
         }
     }
 
