@@ -85,6 +85,11 @@ const defaultConfig: NewRelicLogDeliveryAgentConfig = {
 
 export class NewRelicLogDeliveryAgent {
  
+    private appLabel: string;
+    private regionLabel: string = 'undefined';
+    private environmentLabel: string = 'undefined';
+    private versionLabel: string = 'undefined';
+
     /**
      * Initializes a NewRelicLogDeliveryAgent instance if the LOG_STYLE environment
      * variable is set to NEW_RELIC. Otherwise it does nothing.
@@ -156,7 +161,29 @@ export class NewRelicLogDeliveryAgent {
         this.registerNewRelicInitializationInterval();      
         internalLog('debug', 'LogDeliveryAgent Initialized')
 
+        // Parse environment for labels - Use SERVICE_LABEL if available in env
+        this.appLabel = process.env.SERVICE_LABEL || process.env.NEW_RELIC_APP_NAME as string;
+        const labels = process.env.NEW_RELIC_LABELS;
+        if (labels) {
+            const parts = labels.split(';');
+            const labelMap = new Map<string, string>();
+            parts.forEach(part => {
+                const [label, value] = part.split(':');
+                labelMap.set(label, value);
+            });
 
+            if (labelMap.has('Region')) {
+                this.regionLabel = labelMap.get('Region') as string;
+            }
+
+            if (labelMap.has('Environment')) {
+                this.environmentLabel = labelMap.get('Environment') as string;
+            }
+
+            if (labelMap.has('Version')) {
+                this.versionLabel = labelMap.get('Version') as string;
+            }
+        }
     }
 
     /**
@@ -381,7 +408,10 @@ export class NewRelicLogDeliveryAgent {
             common: {
                 attributes: {
                     ...this.globalAttributes,
-                    service: process.env.NEW_RELIC_APP_NAME,
+                    service: this.appLabel,
+                    version: this.versionLabel,
+                    region: this.regionLabel,
+                    environment: this.environmentLabel,
                     entityGuid: newrelic.getLinkingMetadata()['entity.guid'],
                 },
             },
