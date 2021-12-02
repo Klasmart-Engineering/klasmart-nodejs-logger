@@ -85,6 +85,11 @@ const defaultConfig: NewRelicLogDeliveryAgentConfig = {
 
 export class NewRelicLogDeliveryAgent {
  
+    private appLabel: string;
+    private regionLabel: string = 'undefined';
+    private environmentLabel: string = 'undefined';
+    private versionLabel: string = 'undefined';
+
     /**
      * Initializes a NewRelicLogDeliveryAgent instance if the LOG_STYLE environment
      * variable is set to NEW_RELIC. Otherwise it does nothing.
@@ -156,7 +161,43 @@ export class NewRelicLogDeliveryAgent {
         this.registerNewRelicInitializationInterval();      
         internalLog('debug', 'LogDeliveryAgent Initialized')
 
+        const serviceLabel = process.env.SERVICE_LABEL;
+        let component;
+        const labels = process.env.NEW_RELIC_LABELS;
+        if (labels) {
+            const parts = labels.split(';');
+            const labelMap = new Map<string, string>();
+            parts.forEach(part => {
+                const [label, value] = part.split(':');
+                labelMap.set(label.toLowerCase(), value);
+            });
 
+            if (labelMap.has('region')) {
+                this.regionLabel = labelMap.get('region') as string;
+            }
+
+            if (labelMap.has('environment')) {
+                this.environmentLabel = labelMap.get('environment') as string;
+            }
+
+            if (labelMap.has('version')) {
+                this.versionLabel = labelMap.get('version') as string;
+            }
+
+            component = labelMap.get('component');
+        }
+
+        /* 
+            Assign label name using the following priorities:
+            1. SERVICE_LABEL env value
+            2. NEW_RELIC_LABELS env value component part
+            3. NEW_RELIC_APP_NAME env value
+            4. undefined literal
+        */
+        this.appLabel = serviceLabel
+            || component
+            || process.env.NEW_RELIC_APP_NAME
+            || 'undefined';
     }
 
     /**
@@ -381,7 +422,10 @@ export class NewRelicLogDeliveryAgent {
             common: {
                 attributes: {
                     ...this.globalAttributes,
-                    service: process.env.NEW_RELIC_APP_NAME,
+                    service: this.appLabel,
+                    version: this.versionLabel,
+                    region: this.regionLabel,
+                    environment: this.environmentLabel,
                     entityGuid: newrelic.getLinkingMetadata()['entity.guid'],
                 },
             },
