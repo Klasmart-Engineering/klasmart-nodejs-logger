@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.13](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.12...v0.2.13) (2021-12-03)
+
+
+### Features
+
+* add the splat formatter for string interpolation ([3a8815a](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/3a8815acbed852e964c62f677d0584063972db86))
+* expose the default correlation header key ([ac3448d](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/ac3448dc16a4f95fccc40d0be6ac209edac1a53a))
+
+
+### Bug Fixes
+
+* add @babel/plugin-transform-runtime ([fe123ae](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/fe123aed8502a682808bbdbe91a0d7d3d28e1dac))
+
 ### [0.2.12](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.10...v0.2.12) (2021-12-02)
 
 
