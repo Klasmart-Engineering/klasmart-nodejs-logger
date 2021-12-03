@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.14](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.13...v0.2.14) (2021-12-03)
+
+
+### Bug Fixes
+
+* export the new types, add @babel/runtime as a dependency ([1873fc8](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/1873fc85304346119422c8445b04a452e7698faa))
+
 ### [0.2.13](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.12...v0.2.13) (2021-12-03)
 
 
