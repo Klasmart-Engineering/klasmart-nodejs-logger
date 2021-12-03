@@ -59,7 +59,7 @@ const defaultLoggingLevel = process.env.LOG_LEVEL ?? process.env.LEVEL ?? 'debug
 const messages: [NPMLoggingLevels, string][] = [];
 const [logStyle, message] = getLogStyleOption();
 messages.push(['info', message]);
-export const withLogger = (label: string, level?: NPMLoggingLevels): Logger => {
+export const withLogger = (label: string, level?: NPMLoggingLevels): KLLogger => {
     switch(logStyle) {
         case 'JSON':            return createJsonLogger(label, level);
         case 'STRING':          return createStringLogger(label, level);
