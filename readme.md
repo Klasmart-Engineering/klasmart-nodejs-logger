@@ -74,7 +74,9 @@ A correlation ID is a value utilized to track the processing of a request throug
 
 #### Usage
 
-This module provides an express middlware that will read and store requests' correlation ID or otherwise generate a correlation ID when one is not provided.  To utilize this, simply call the correlation ID higher order function prior to routing your request to final handlers.
+This module provides an express middlware that will read and store requests' correlation ID or otherwise generate a correlation ID when one is not provided. It will also automatically populate the correlation ID header in the response.
+
+To utilize this, simply call the correlation ID higher order function prior to routing your request to final handlers.
 
 ```
 import Express from 'express';
@@ -88,7 +90,7 @@ If you are using the logger provided in this package, this is all you need to do
 
 #### Retrieving the correlation ID
 
-In the case that you are sending requests out to other services, you should propagate the `x-correlation-id` header with these requests. To retrieve the correlation ID value, use the `withCorrelation` helper function.
+To retrieve the correlation ID value, use the `withCorrelation` helper function.
 
 ```
 import { withCorrelation } from 'kidsloop-nodejs-logger`;

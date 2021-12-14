@@ -16,6 +16,7 @@ const localStorage = new AsyncLocalStorage<string>();
 export function correlationMiddleware(header = DEFAULT_CORRELATION_HEADER) {
     return (request: Request, response: Response, next: NextFunction) => {
         let correlationId = request.headers[header] as string || generateCorrelationId();
+        response.setHeader(header, correlationId);
         localStorage.run(correlationId, async () => {
             next();
         });
