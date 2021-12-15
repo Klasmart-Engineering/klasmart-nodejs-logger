@@ -7,7 +7,7 @@ This is a utility logging package that wraps around [Winston logger](https://git
 ### Logger
 
 #### Basic Setup
-To get a logging instance, use `withLogger` and pass in a label for the logger intance - generally this can be the file or classname, but can be any label that provides appropriate context for logs.
+To get a logging instance, use `withLogger` and pass in a label for the logger instance - generally this can be the file or class name, but can be any label that provides appropriate context for logs.
 
 ```
 import { withLogger } from 'kidsloop-nodejs-logger';
@@ -53,7 +53,7 @@ LOG_STYLE - One of: [STRING_COLOR, STRING, JSON, SILENT, NEW_RELIC]. Default: ST
 * NEW_RELIC: JSON logs enhanced with the Winston New Relic log extender. When configured to NEW_RELIC a LogDeliveryAgent will be configured that will attempt to send logs written to winston and through stdout and stderr to New Relic. This is the recommended setting for deployed apps that are configured to use New Relic. Note: This setting will fall back to JSON if there is insufficient configuration for New Relic (lacking NEW_RELIC_LICENSE_KEY or NEW_RELIC_APP_NAME).
 
 
-LOG_LEVEL - One of: [silly, debug, verbose, http, info, warn, error]. Default: debug. Configures minimum log level for the application. Logger instances that are not provided specific log levels will log to this application default. The value is a mimimum. Logs at the specified level and above will be written and log statements below this level will not be written.
+LOG_LEVEL - One of: [silly, debug, verbose, http, info, warn, error]. Default: debug. Configures minimum log level for the application. Logger instances that are not provided specific log levels will log to this application default. The value is a minimum. Logs at the specified level and above will be written and log statements below this level will not be written.
 
 LEVEL - Alternative to LOG_LEVEL provided for convenience when migrating from the `debug` logging library. If both LOG_LEVEL and LEVEL are defined, then the value of LOG_LEVEL will be used.
 
@@ -74,7 +74,7 @@ A correlation ID is a value utilized to track the processing of a request throug
 
 #### Usage
 
-This module provides an express middlware that will read and store requests' correlation ID or otherwise generate a correlation ID when one is not provided. It will also automatically populate the correlation ID header in the response.
+This module provides an express middleware that will read and store requests' correlation ID or otherwise generate a correlation ID when one is not provided. It will also automatically populate the correlation ID header in the response.
 
 To utilize this, simply call the correlation ID higher order function prior to routing your request to final handlers.
 
@@ -90,7 +90,7 @@ If you are using the logger provided in this package, this is all you need to do
 
 #### Retrieving the correlation ID
 
-To retrieve the correlation ID value, use the `withCorrelation` helper function.
+In the case that you are sending requests out to other services, you should propagate the `x-correlation-id` header with these requests. To retrieve the correlation ID value, use the `withCorrelation` helper function.
 
 ```
 import { withCorrelation } from 'kidsloop-nodejs-logger`;
