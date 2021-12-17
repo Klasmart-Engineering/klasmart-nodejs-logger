@@ -35,7 +35,6 @@ export function withCorrelation() {
  * Adds hooks to http/https modules to automatically attach a correlation
  * ID to outgoing requests
  */
-
 function attachCorrelationIDHook(module: typeof http | typeof https) {
     let actualCall = module.request;
 
