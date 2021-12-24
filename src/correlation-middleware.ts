@@ -63,12 +63,12 @@ function attachCorrelationIDHook(module: typeof http | typeof https) {
         const correlationId = withCorrelation();
 
         // Case: Headers object is present but no correlationID provided
-        if (actualOptions.headers && !actualOptions.headers[DEFAULT_CORRELATION_HEADER]) {
+        if (correlationId && actualOptions.headers && !actualOptions.headers[DEFAULT_CORRELATION_HEADER]) {
             actualOptions.headers[DEFAULT_CORRELATION_HEADER] = correlationId;
         }
 
         // Case: Headers option was not passed, add both headers option and correlationID
-        if (!actualOptions.headers) {
+        if (correlationId && !actualOptions.headers) {
             actualOptions.headers = {};
             actualOptions.headers[DEFAULT_CORRELATION_HEADER] = correlationId;
         }
