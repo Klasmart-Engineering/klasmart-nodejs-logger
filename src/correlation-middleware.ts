@@ -25,6 +25,41 @@ export function correlationMiddleware(header = DEFAULT_CORRELATION_HEADER) {
     }
 }
 
+/**
+ * Utility function to provide access to correlation ID tracking in the
+ * wrapped async context. Consumers may manually supply the correlation ID or
+ * this function will generate a correlation ID as a v4 UUID.
+ */
+export async function correlationContextWrapper(correlationId: string, callback: () => any): Promise<void>;
+export async function correlationContextWrapper(callback: () => any): Promise<void>;
+export async function correlationContextWrapper(a: string | (() => void), b?: (() => any)): Promise<void> {
+    let correlationId: string;
+    let callback: () => any;
+    
+    /* Determine which overload is being called and assign variables appropriately */
+    if (typeof a === 'string') {
+        correlationId = a;
+    } else {
+        correlationId = generateCorrelationId();
+    }
+
+    if (a instanceof Function) {
+        callback = a;
+    } else if (b instanceof Function) {
+        callback = b;
+    } else {
+        throw Error(`Invalid parameters: A callback function must be provided.`)
+    }
+
+    /* Run callback within local storage context*/
+    await localStorage.run(correlationId, async () => {
+        const result = callback();
+        if (result instanceof Promise) {
+            await result;
+        }
+    })
+}
+
 const generateCorrelationId = () => uuidv4();
 
 export function withCorrelation() {
@@ -52,10 +87,10 @@ function attachCorrelationIDHook(module: typeof http | typeof https) {
         
         if (url instanceof URL || typeof url === 'string') {
             actualUrl = url;
-            actualOptions = options as RequestOptions;
+            actualOptions = options as RequestOptions || {};
             actualCallback = callback;
         } else {
-            actualOptions = url;
+            actualOptions = url || {};
             actualCallback = options as (res: http.IncomingMessage) => void;
         }
 
@@ -63,12 +98,12 @@ function attachCorrelationIDHook(module: typeof http | typeof https) {
         const correlationId = withCorrelation();
 
         // Case: Headers object is present but no correlationID provided
-        if (correlationId && actualOptions.headers && !actualOptions.headers[DEFAULT_CORRELATION_HEADER]) {
+        if (correlationId && actualOptions?.headers && !actualOptions.headers[DEFAULT_CORRELATION_HEADER]) {
             actualOptions.headers[DEFAULT_CORRELATION_HEADER] = correlationId;
         }
 
         // Case: Headers option was not passed, add both headers option and correlationID
-        if (correlationId && !actualOptions.headers) {
+        if (correlationId && !actualOptions?.headers) {
             actualOptions.headers = {};
             actualOptions.headers[DEFAULT_CORRELATION_HEADER] = correlationId;
         }
