@@ -87,7 +87,6 @@ let server: Server;
 
             describe('without correlation ID configured', () => {
                 it('should create a request with with no x-correlation-id header when no config object is provided', done => {
-                    const correlationId = '1234';
                     let request: ClientRequest;
 
                     request = http.request('http://google.com');
@@ -100,7 +99,6 @@ let server: Server;
                 });
 
                 it('should create a request with an x-correlation-id header when params are passed with no headers object provided', done =>  {
-                    const correlationId = '5678';
                     let request: ClientRequest;
                     request = http.request({
                         host: 'localhost',
@@ -114,7 +112,6 @@ let server: Server;
                 });
 
                 it('should create a request with an x-correlation-id header when params are passed along with headers object', done => {
-                    const correlationId = '9102';
                     let request: ClientRequest;
                     const headerValue = 'TEST_SERVICE';
                     request = http.request({
