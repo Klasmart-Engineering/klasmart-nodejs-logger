@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "standard-version",
+    "pre-release": "standard-version --prerelease dev",
     "build": "npm run clean && babel src --out-dir dist --extensions \".ts\" --source-maps inline && tsc --emitDeclarationOnly",
     "clean": "rm -rf dist"
   },
