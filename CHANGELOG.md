@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.15-dev.0](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.13...v0.2.15-dev.0) (2022-01-07)
+
+
+### Features
+
+* automatically set the response correlation ID header ([c02ee21](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/c02ee218f0f120c8c81e54024cafe6c66d220699))
+* **H5P-341:** automatically add x-correlation-header when correlation-middleware initialized ([2213cfe](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/2213cfe28b5eae58a35d18c6f138803797346894))
+
+
+### Bug Fixes
+
+* export the new types, add @babel/runtime as a dependency ([1873fc8](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/1873fc85304346119422c8445b04a452e7698faa))
+* **H5P-346:** fix issue where HTTP requests fail when no headers are provided and there is no correlation context ([dcefbd0](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/dcefbd0171a8f1a56b8979abb290be7adf32ddc4))
+
 ### [0.2.14](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.13...v0.2.14) (2021-12-03)
 
 
