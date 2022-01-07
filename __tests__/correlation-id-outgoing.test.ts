@@ -10,7 +10,7 @@ let server: Server;
     /* Create a server for created requests to be sent to */
     beforeAll((ready) => {
         const app = express();
-        app.use((req: Request, response: Respones, next) =>{
+        app.use((req: Request, response: Response, next) =>{
             next();
         })
         app.use((_: Request, response: Response) => response.sendStatus(200));
