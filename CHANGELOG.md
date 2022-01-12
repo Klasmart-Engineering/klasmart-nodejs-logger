@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.16](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.13...v0.2.16) (2022-01-12)
+
+
+### Features
+
+* automatically set the response correlation ID header ([c02ee21](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/c02ee218f0f120c8c81e54024cafe6c66d220699))
+
+
+### Bug Fixes
+
+* export the new types, add @babel/runtime as a dependency ([1873fc8](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/commit/1873fc85304346119422c8445b04a452e7698faa))
+
 ### [0.2.15](https://bitbucket.org/calmisland/kidsloop-nodejs-logger/compare/v0.2.14...v0.2.15) (2021-12-17)
 
 
