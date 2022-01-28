@@ -1,5 +1,5 @@
 {
-  "name": "kidsloop-nodejs-logger",
+  "name": "@kidsloop-uk/kidsloop-nodejs-logger",
   "version": "0.2.16",
   "description": "Logging utility built on top of Winston to provide logging functionality for NodeJS based Kidsloop apps",
   "main": "dist/index.js",
@@ -46,5 +46,9 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "repository": "git://github.com/kidsloop-uk/kidsloop-nodejs-logger.git",
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
   }
 }
