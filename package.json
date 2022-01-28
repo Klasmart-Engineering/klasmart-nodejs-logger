@@ -4,7 +4,7 @@
   "description": "Logging utility built on top of Winston to provide logging functionality for NodeJS based Kidsloop apps",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "release": "standard-version",
     "build": "npm run clean && babel src --out-dir dist --extensions \".ts\" --source-maps inline && tsc --emitDeclarationOnly",
     "clean": "rm -rf dist"
