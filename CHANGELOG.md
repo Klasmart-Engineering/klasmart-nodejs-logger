@@ -9,6 +9,7 @@
 ### Features
 
 * **H5P-341:** automatically add x-correlation-header when correlation-middleware initialized ([1fb877d](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/1fb877da82ebc330ebffa2b162935b0bf2bd8b59))
+* **H5P-436:** add correlationContextWrapper to exports, allows for arbitrary code to be wrapped into an async context with a correlation id ([310fce1](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/310fce177f0cee15ef184ef861000ae0e41f2861))
 
 
 
