@@ -1,3 +1,22 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.2.17](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/compare/v0.2.16...v0.2.17) (2022-02-09)
+
+
+### Features
+
+* **H5P-341:** automatically add x-correlation-header when correlation-middleware initialized ([1fb877d](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/1fb877da82ebc330ebffa2b162935b0bf2bd8b59))
+* **H5P-341:** automatically add x-correlation-header when correlation-middleware initialized ([0b0cc87](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/0b0cc879bf6d205c5f40d391dcb7eb7a2d837180))
+* **H5P-436:** add correlationContextWrapper to exports, allows for arbitrary code to be wrapped into an async context with a correlation id ([310fce1](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/310fce177f0cee15ef184ef861000ae0e41f2861))
+
+
+### Bug Fixes
+
+* **H5P-346:** fix issue where HTTP requests fail when no headers are provided and there is no correlation context ([02bc61e](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/02bc61ea315edf53cee1060634bd1acc1eef2b52))
+* **H5P-346:** fix issue where HTTP requests fail when no headers are provided and there is no correlation context ([3d48a90](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/3d48a902b93d233c72863b5687c830125e15e15d))
+
 ## [0.2.17-dev.1](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/compare/v0.2.16...v0.2.17-dev.1) (2022-02-07)
 
 
@@ -275,6 +294,3 @@
 
 * add build script, add babel config, add built dist package ([5641754](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/5641754e6d7c342a3c5aaf48e23056c1bfa233a3))
 * initial commit ([e4a94b0](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/commit/e4a94b0732903d7d64815fe06ef17077508a6ae7))
-
-
-
