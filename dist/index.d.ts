@@ -1,6 +1,6 @@
 import 'babel-polyfill';
-import { correlationMiddleware, withCorrelation, DEFAULT_CORRELATION_HEADER } from './correlation-middleware';
+import { correlationMiddleware, correlationContextWrapper, withCorrelation, DEFAULT_CORRELATION_HEADER } from './correlation-middleware';
 import { withLogger, KLLogger } from './logger';
 import { NewRelicLogDeliveryAgent } from './LogDeliveryAgent';
-export { correlationMiddleware, withCorrelation, withLogger, NewRelicLogDeliveryAgent, KLLogger, DEFAULT_CORRELATION_HEADER };
+export { correlationMiddleware, correlationContextWrapper, withCorrelation, withLogger, NewRelicLogDeliveryAgent, KLLogger, DEFAULT_CORRELATION_HEADER };
 //# sourceMappingURL=index.d.ts.map
