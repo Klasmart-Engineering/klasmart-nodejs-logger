@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/compare/v0.2.17...v0.3.0) (2022-02-09)
+
 ### [0.2.17](https://github.com/kidsloop-uk/kidsloop-nodejs-logger/compare/v0.2.16...v0.2.17) (2022-02-09)
 
 
