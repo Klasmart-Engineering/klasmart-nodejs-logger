@@ -67,12 +67,12 @@ DEBUG_WRITE_LOGS_TO_FILE - When set to 'true' the LogDeliveryAgent will write lo
 
 SERVICE_LABEL - Optional. Used to provide a 'service' label for logs delivered to New Relic.  This is the highest priority value for the service label, if not provided it will fallback to component tags in NEW_RELIC_LABELS, the value of NEW_RELIC_APP_NAME, and then 'undefined' in that order.
 
-### Correlation ID Middleware
+### Correlation ID Management
 
 #### Purpose
 A correlation ID is a value utilized to track the processing of a request throughout its propagation between services. A single request could interact with many services, so by filtering by a correlation ID one can filter logs and see the full lifecycle of a request between different services. The correlation ID generally propagated through a header, typically `x-correlation-id`. As this value is useful for logging, tooling is provided to make it easy for developers to manage it.
 
-#### Usage
+#### Express Middleware Usage
 
 This module provides an express middleware that will read and store requests' correlation ID or otherwise generate a correlation ID when one is not provided. It will also automatically populate the correlation ID header in the response.
 
@@ -88,9 +88,16 @@ app.use(correlationMiddleware());
 
 If you are using the logger provided in this package, this is all you need to do. Correlation IDs will be managed using AsyncLocalStorage internally and will automatically be added to log statements. You do not need to manually provide the correlation ID to log statements.
 
+#### Correlation ID Management without Middleware
+
+In situations where Express middleware is not applicable, your project can create an asynchronous context by wrapping a function with the utility function `correlationContextWrapper`. This requires a callback function. Code executing in this callback function will have an AsyncLocalStorage defined for its execution context, allowing for calls within it to resolve a correlation ID. The correlation ID for this context cannot be assumed from a request, so it can either be provided as a parameter to the `correlationContextWrapper` function or will be generated when one is not provided.
+
+#### Automatic Correlation ID Propagation
+When requests are sent from within an execution context defined either by the Express middleware or a function wrapped by the correlationContextWrapper function, outgoing requests based on the core http/https modules will automatically include the 'x-correlation-id' header in requests. Most request libraries are built upon these modules, so usages of these will also include the header. This has been tested with Axios, node-fetch, and graphql-request.
+
 #### Retrieving the correlation ID
 
-In the case that you are sending requests out to other services, you should propagate the `x-correlation-id` header with these requests. To retrieve the correlation ID value, use the `withCorrelation` helper function.
+In the case that you need to directly access the correlation ID from within the current context, then you can retrieve it using the  withCorrelation function.
 
 ```
 import { withCorrelation } from 'kidsloop-nodejs-logger`;
