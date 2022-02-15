@@ -1,6 +1,6 @@
 {
-  "name": "@kidsloop-uk/kidsloop-nodejs-logger",
-  "version": "0.3.0",
+  "name": "@kl-engineering/kidsloop-nodejs-logger",
+  "version": "0.3.1",
   "description": "Logging utility built on top of Winston to provide logging functionality for NodeJS based Kidsloop apps",
   "main": "dist/index.js",
   "scripts": {
@@ -48,7 +48,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "repository": "git://github.com/kidsloop-uk/kidsloop-nodejs-logger.git",
+  "repository": "git://github.com/kl-engineering/kidsloop-nodejs-logger.git",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   }
