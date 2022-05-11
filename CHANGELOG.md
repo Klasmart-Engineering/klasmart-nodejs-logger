@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0-dev.0](https://github.com/kl-engineering/kidsloop-nodejs-logger/compare/v0.3.2...v0.4.0-dev.0) (2022-05-11)
+
+
+### ✨ Features
+
+* enhance output for STRING and STRING_COLOR log style (#7) ([a2a4849](https://github.com/kl-engineering/kidsloop-nodejs-logger/commit/a2a4849cd366c98ee7bf5631b8c5a351eafea004))
+
+
+### 🔨 Build
+
+* rebuild artifacts ([4820a57](https://github.com/kl-engineering/kidsloop-nodejs-logger/commit/4820a57480ccf26374a71f84c7866d7103ee7701))
+
 ### [0.3.2](https://github.com/kl-engineering/kidsloop-nodejs-logger/compare/v0.3.1...v0.3.2) (2022-02-15)
 
 ### [0.3.1](https://github.com/kl-engineering/kidsloop-nodejs-logger/compare/v0.3.0...v0.3.1) (2022-02-15)
