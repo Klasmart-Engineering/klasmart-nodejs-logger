@@ -13,8 +13,19 @@ type LogStyle = 'STRING_COLOR' | 'STRING' | 'JSON' | 'SILENT' | 'NEW_RELIC';
 const logStyles: LogStyle[] = ['STRING_COLOR', 'STRING', 'JSON', 'SILENT', 'NEW_RELIC'];
 const defaultLogStyle: LogStyle = logStyles[0];
 
-const stdoutFormat = winston.format.printf(({ level, message, label, timestamp }) => {
-    return `${timestamp} [${label}] ${level}: ${message}`
+const stdoutFormat = winston.format.printf(({ level, message, label, timestamp, ...meta }) => {
+    if (message as any instanceof Object) {
+        message = JSON.stringify(message);
+    }
+    let result = `${timestamp} [${label}] ${level}: ${message}`
+    if (meta) {
+        const metaJson = JSON.stringify(meta);
+
+        // Don't write metadata if the JSON string was empty due to undefined values, eg: { correlationId: undefined }
+        if (metaJson.length > 2) 
+            result += ` ${metaJson}`
+    }
+    return result
 });
 
 const correlationIdFormat = winston.format(info => {

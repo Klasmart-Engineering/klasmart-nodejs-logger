@@ -1,9 +1,0 @@
-"use strict";
-
-var _child_process = require("child_process");
-
-var child = (0, _child_process.fork)('./dist/child.js');
-child.send({
-  data: 'some value'
-});
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9zcGF3bi50cyJdLCJuYW1lcyI6WyJjaGlsZCIsInNlbmQiLCJkYXRhIl0sIm1hcHBpbmdzIjoiOztBQUFBOztBQUVBLElBQU1BLEtBQUssR0FBRyx5QkFBSyxpQkFBTCxDQUFkO0FBRUFBLEtBQUssQ0FBQ0MsSUFBTixDQUFXO0FBQUNDLEVBQUFBLElBQUksRUFBRTtBQUFQLENBQVgiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBmb3JrIH0gZnJvbSAnY2hpbGRfcHJvY2Vzcyc7XG5cbmNvbnN0IGNoaWxkID0gZm9yaygnLi9kaXN0L2NoaWxkLmpzJyk7XG5cbmNoaWxkLnNlbmQoe2RhdGE6ICdzb21lIHZhbHVlJ30pOyJdfQ==
